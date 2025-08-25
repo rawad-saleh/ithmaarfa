@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ithmaar Financial Advisory | Financial & Acquisition Advisory</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Chosen Palette: Earth Tones with a Deep Blue Accent -->
+    <!-- Application Structure Plan: A single, fluid-scrolling page with no fixed navigation. The structure is a linear narrative, guiding the user through the brand's story. It starts with a bold hero section, followed by a detailed services section (with tabs), team and portfolio sections for credibility, a value proposition section (why choose us), and a chart for expertise, all leading to a final contact form. The user flow is sequential, ensuring every piece of information is seen in a logical order without the distraction of a top menu. -->
+    <!-- Visualization & Content Choices: 
+        - Services Section: Goal: Organize/Inform -> Method: Tabbed Interface -> Interaction: Click to reveal content -> Justification: Breaks up dense text into manageable, interactive chunks. Implemented with vanilla JS.
+        - "Done-For-You" Process: Goal: Organize/Explain Process -> Method: Numbered vertical timeline diagram -> Interaction: Subtle hover effects -> Justification: Visually simplifies a complex, multi-step process for easy understanding. Implemented with HTML/Tailwind.
+        - Market Expertise: Goal: Inform/Add Credibility -> Method: Radar Chart -> Interaction: Hover for tooltips -> Justification: Visually supports the claim of data-driven expertise and adds a dynamic element. Implemented with Chart.js on a Canvas element.
+    -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f5f5f4;
+            color: #333;
+        }
+        .tab.active {
+            border-color: #2e668c;
+            background-color: #f0f4f7;
+            color: #2e668c;
+        }
+        .process-step::before {
+            content: '';
+            position: absolute;
+            left: 1.25rem;
+            top: 3rem;
+            bottom: -2rem;
+            width: 2px;
+            background-color: #cbd5e1;
+            z-index: 0;
+        }
+        .process-step:last-child::before {
+            display: none;
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 300px;
+            max-height: 400px;
+        }
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 400px;
+            }
+        }
+    </style>
+</head>
+<body class="bg-stone-50 text-slate-800">
+
+    <main>
+        <section class="bg-white py-8 text-center">
+            <div class="container mx-auto px-6">
+                 <h1 class="text-3xl font-bold text-slate-900">ithmaar <span class="text-purple-600">financial advisory</span></h1>
+            </div>
+        </section>
+        
+        <section id="hero" class="bg-white">
+            <div class="container mx-auto px-6 py-20 md:py-32 text-center">
+                <h1 class="text-4xl md:text-6xl font-bold text-slate-900 leading-tight">Your Strategic Partner for Growth and Success in the MENA Region</h1>
+                <p class="mt-6 text-lg md:text-xl text-slate-600 max-w-3xl mx-auto">We transform complex financial data into actionable insights, guiding your business from strategic planning to successful acquisition in the UAE and Jordan.</p>
+            </div>
+        </section>
+
+        <section id="about" class="py-20 md:py-28">
+            <div class="container mx-auto px-6">
+                <div>
+                    <h2 class="text-3xl md:text-4xl font-bold text-slate-900">About ithmaar Financial Advisory</h2>
+                    <p class="mt-4 text-slate-600">With a deep-rooted presence and extensive local market knowledge in both the UAE and Jordan, ithmaar Financial Advisory is uniquely positioned to serve as your trusted partner.</p>
+                    <p class="mt-4 text-slate-600">We are a team of seasoned financial professionals dedicated to delivering personalized, data-driven solutions. Our approach combines rigorous analysis with a client-centric philosophy, ensuring that we not only meet but exceed your financial objectives.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="services" class="py-20 md:py-28 bg-white">
+            <div class="container mx-auto px-6">
+                <div class="text-center max-w-3xl mx-auto">
+                    <h2 class="text-3xl md:text-4xl font-bold text-slate-900">Our Services</h2>
+                    <p class="mt-4 text-slate-600">We provide a comprehensive suite of financial and advisory services designed to provide clarity, direction, and hands-on support for your business journey.</p>
+                </div>
+
+                <div class="mt-12 max-w-4xl mx-auto">
+                    <div class="flex justify-center border-b border-slate-200">
+                        <button data-tab="analysis" class="tab text-lg font-medium py-3 px-6 border-b-2 transition-colors active">Financial Analysis</button>
+                        <button data-tab="advisory" class="tab text-lg font-medium py-3 px-6 border-b-2 border-transparent text-slate-500 hover:text-slate-800 transition-colors">Acquisition Advisory</button>
+                        <button data-tab="outsourcing" class="tab text-lg font-medium py-3 px-6 border-b-2 border-transparent text-slate-500 hover:text-slate-800 transition-colors">Outsourcing Services</button>
+                    </div>
+
+                    <div id="analysis" class="tab-content mt-10">
+                        <div class="grid sm:grid-cols-2 gap-8">
+                            <div class="bg-stone-50 p-6 rounded-lg">
+                                <h3 class="font-bold text-xl text-slate-800">Financial Modeling & Forecasting</h3>
+                                <p class="mt-2 text-slate-600">Building robust models to predict future performance and inform strategic decisions.</p>
+                            </div>
+                            <div class="bg-stone-50 p-6 rounded-lg">
+                                <h3 class="font-bold text-xl text-slate-800">Business Valuation</h3>
+                                <p class="mt-2 text-slate-600">Providing accurate valuations for fundraising, mergers, and acquisitions.</p>
+                            </div>
+                            <div class="bg-stone-50 p-6 rounded-lg">
+                                <h3 class="font-bold text-xl text-slate-800">Due Diligence</h3>
+                                <p class="mt-2 text-slate-600">Uncovering potential risks and opportunities before a transaction.</p>
+                            </div>
+                            <div class="bg-stone-50 p-6 rounded-lg">
+                                <h3 class="font-bold text-xl text-slate-800">Feasibility Studies</h3>
+                                <p class="mt-2 text-slate-600">Assessing the financial viability of new projects, ventures, or market entries.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="advisory" class="tab-content mt-10 hidden">
+                        <h3 class="text-2xl font-bold text-center text-slate-900">The ithmaar Financial Advisory Advantage: Your Done-For-You Acquisition Path</h3>
+                        <p class="text-center mt-2 text-slate-600">Our hands-on, end-to-end solution for a seamless business acquisition. We manage the entire process, allowing you to focus on your core business.</p>
+                        <div class="mt-12 relative">
+                            <div class="process-step relative pl-12 pb-8">
+                                <div class="absolute left-0 top-0 flex items-center justify-center w-10 h-10 bg-sky-800 text-white font-bold rounded-full z-10">1</div>
+                                <h4 class="font-bold text-xl text-slate-800 pt-2">Strategic Blueprinting & Target Profile</h4>
+                                <p class="mt-2 text-slate-600">We begin by defining your ideal acquisition target through in-depth consultation, creating a precise profile based on industry, size, and financial performance.</p>
+                            </div>
+                            <div class="process-step relative pl-12 pb-8">
+                                <div class="absolute left-0 top-0 flex items-center justify-center w-10 h-10 bg-sky-800 text-white font-bold rounded-full z-10">2</div>
+                                <h4 class="font-bold text-xl text-slate-800 pt-2">Proactive Sourcing & Outreach</h4>
+                                <p class="mt-2 text-slate-600">Our team actively researches and approaches potential off-market targets on your behalf, initiating confidential conversations.</p>
+                            </div>
+                            <div class="process-step relative pl-12 pb-8">
+                                <div class="absolute left-0 top-0 flex items-center justify-center w-10 h-10 bg-sky-800 text-white font-bold rounded-full z-10">3</div>
+                                <h4 class="font-bold text-xl text-slate-800 pt-2">Financial Vetting & Valuation</h4>
+                                <p class="mt-2 text-slate-600">We conduct rigorous financial analysis and valuation to determine a fair market price, providing a comprehensive due diligence report.</p>
+                            </div>
+                            <div class="process-step relative pl-12 pb-8">
+                                <div class="absolute left-0 top-0 flex items-center justify-center w-10 h-10 bg-sky-800 text-white font-bold rounded-full z-10">4</div>
+                                <h4 class="font-bold text-xl text-slate-800 pt-2">Deal Structuring & Negotiation</h4>
+                                <p class="mt-2 text-slate-600">We structure the deal to be financially advantageous and handle all negotiations to secure the best possible terms while minimizing your risk.</p>
+                            </div>
+                            <div class="process-step relative pl-12">
+                                <div class="absolute left-0 top-0 flex items-center justify-center w-10 h-10 bg-sky-800 text-white font-bold rounded-full z-10">5</div>
+                                <h4 class="font-bold text-xl text-slate-800 pt-2">Closing & Transition Support</h4>
+                                <p class="mt-2 text-slate-600">We guide you through the final stages, coordinating with legal counsel, managing the closing, and supporting a smooth post-acquisition integration.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="outsourcing" class="tab-content mt-10 hidden">
+                        <h3 class="text-2xl font-bold text-center text-slate-900">Streamline Your Operations with Our Outsourcing Solutions</h3>
+                        <p class="text-center mt-2 text-slate-600">Offload your core financial and IT functions to our expert team, allowing you to reduce costs, enhance efficiency, and focus on strategic growth.</p>
+                        <div class="grid sm:grid-cols-2 gap-8 mt-12">
+                            <div class="bg-stone-50 p-6 rounded-lg">
+                                <h3 class="font-bold text-xl text-slate-800">Finance Outsourcing</h3>
+                                <ul class="mt-2 text-slate-600 list-disc list-inside">
+                                    <li>Bookkeeping and Accounting</li>
+                                    <li>Payroll Management</li>
+                                    <li>Financial Reporting</li>
+                                    <li>Accounts Payable/Receivable</li>
+                                </ul>
+                            </div>
+                            <div class="bg-stone-50 p-6 rounded-lg">
+                                <h3 class="font-bold text-xl text-slate-800">IT Outsourcing</h3>
+                                <ul class="mt-2 text-slate-600 list-disc list-inside">
+                                    <li>IT Strategy and Consulting</li>
+                                    <li>IT Support and Maintenance</li>
+                                    <li>Cloud Services Management</li>
+                                    <li>Data Management and Security</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="team" class="py-20 md:py-28">
+            <div class="container mx-auto px-6">
+                <div class="text-center max-w-3xl mx-auto">
+                    <h2 class="text-3xl md:text-4xl font-bold text-slate-900">Our Team</h2>
+                    <p class="mt-4 text-slate-600">Our team brings a wealth of experience in financial strategy, mergers and acquisitions, and regional market dynamics. We are committed to your success.</p>
+                </div>
+                <div class="mt-12 grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <div class="bg-white p-8 rounded-lg shadow-sm text-center">
+                        <span class="text-6xl">👨🏽‍💼</span>
+                        <h3 class="mt-4 font-bold text-xl text-slate-800">Moh. Tayeh</h3>
+                        <p class="mt-2 text-slate-600 font-semibold">Chief Financial Analyst</p>
+                        <p class="mt-1 text-slate-500 text-sm">Over 20 years of experience in corporate finance with a robust background in finance and financial markets.</p>
+                    </div>
+                    <div class="bg-white p-8 rounded-lg shadow-sm text-center">
+                        <span class="text-6xl">👩🏼‍💼</span>
+                        <h3 class="mt-4 font-bold text-xl text-slate-800">Rawad Saleh</h3>
+                        <p class="mt-2 text-slate-600 font-semibold">Fintech Analyst</p>
+                        <p class="mt-1 text-slate-500 text-sm">Rawad is a forward-thinking Fintech Analyst, specializing in the latest financial technologies and digital solutions to help our clients stay ahead of market trends.</p>
+                    </div>
+                    <div class="bg-white p-8 rounded-lg shadow-sm text-center">
+                        <span class="text-6xl">👨🏽‍💼</span>
+                        <h3 class="mt-4 font-bold text-xl text-slate-800">Murad Taher</h3>
+                        <p class="mt-2 text-slate-600 font-semibold">Managing Partner</p>
+                        <p class="mt-1 text-slate-500 text-sm">Murad brings extensive experience in acquisition, procurement, and business development, driving strategic growth initiatives for our clients.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="portfolio" class="py-20 md:py-28 bg-white">
+            <div class="container mx-auto px-6">
+                <div class="text-center max-w-3xl mx-auto">
+                    <h2 class="text-3xl md:text-4xl font-bold text-slate-900">Our Portfolio & Case Studies</h2>
+                    <p class="mt-4 text-slate-600">We take pride in our track record of helping clients achieve their strategic goals. Here are a few examples of our work and the value we have created.</p>
+                </div>
+                <div class="mt-12 grid md:grid-cols-2 gap-8">
+                    <div class="bg-stone-50 p-8 rounded-lg shadow-sm">
+                        <div class="flex items-start gap-6">
+                            <span class="text-5xl">🏢</span>
+                            <div>
+                                <h3 class="font-bold text-xl text-slate-800">Jordan River Foundation</h3>
+                                <p class="mt-2 text-slate-600 text-sm">Prepared Economic Feasibility Studies for Comprehensive Development Initiative Projects. Our work involved extensive market analysis, financial modeling, and risk assessment to ensure the long-term viability and social impact of the foundation's strategic projects.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-stone-50 p-8 rounded-lg shadow-sm">
+                        <div class="flex items-start gap-6">
+                            <span class="text-5xl">🏗️</span>
+                            <div>
+                                <h3 class="font-bold text-xl text-slate-800">Construction</h3>
+                                <p class="mt-2 text-slate-600 text-sm">Provided consultation services to a major construction company to enhance procurement processes across multiple legal entities. We also advised on the strategic outsourcing of procurement functions to improve cost control and increase the quality of materials.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="why-us" class="py-20 md:py-28">
+            <div class="container mx-auto px-6">
+                <div class="text-center max-w-3xl mx-auto">
+                    <h2 class="text-3xl md:text-4xl font-bold text-slate-900">Why Choose Us?</h2>
+                    <p class="mt-4 text-slate-600">Our unique approach combines deep regional expertise with a commitment to personalized service and data-driven results.</p>
+                </div>
+                <div class="mt-12 grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+                    <div class="bg-white p-8 rounded-lg shadow-sm text-center">
+                        <span class="text-4xl"> 🇪🇯🇴</span>
+                        <h3 class="mt-4 font-bold text-xl text-slate-800">Dual-Market Expertise</h3>
+                        <p class="mt-2 text-slate-600">Unparalleled insight into the economic landscapes of the UAE and Jordan.</p>
+                    </div>
+                    <div class="bg-white p-8 rounded-lg shadow-sm text-center">
+                        <span class="text-4xl">🎯</span>
+                        <h3 class="mt-4 font-bold text-xl text-slate-800">Tailored Solutions</h3>
+                        <p class="mt-2 text-slate-600">Bespoke strategies that deliver tangible results for your unique business needs.</p>
+                    </div>
+                    <div class="bg-white p-8 rounded-lg shadow-sm text-center">
+                        <span class="text-4xl">🤝</span>
+                        <h3 class="mt-4 font-bold text-xl text-slate-800">Client-Centric Approach</h3>
+                        <p class="mt-2 text-slate-600">Long-term relationships based on trust, transparency, and communication.</p>
+                    </div>
+                    <div class="bg-white p-8 rounded-lg shadow-sm text-center">
+                        <span class="text-4xl">💡</span>
+                        <h3 class="mt-4 font-bold text-xl text-slate-800">Actionable Insights</h3>
+                        <p class="mt-2 text-slate-600">Clear recommendations that empower you to make confident, informed decisions.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="expertise" class="py-20 md:py-28 bg-white">
+            <div class="container mx-auto px-6">
+                 <div class="grid md:grid-cols-2 gap-12 items-center">
+                    <div>
+                        <h2 class="text-3xl md:text-4xl font-bold text-slate-900">Our Expertise in the Region</h2>
+                        <p class="mt-4 text-slate-600">The financial ecosystems of the region present diverse opportunities and challenges. Our teams have cultivated strong relationships and a deep understanding of market dynamics. We provide the localized expertise you need to succeed, whether you're a local business seeking to expand or an international firm looking to enter the MENA region.</p>
+                    </div>
+                    <div>
+                        <div class="chart-container">
+                            <canvas id="marketChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="contact" class="py-20 md:py-28 bg-slate-800 text-white">
+            <div class="container mx-auto px-6 text-center">
+                <h2 class="text-3xl md:text-4xl font-bold">Ready to Take the Next Step?</h2>
+                <p class="mt-4 text-slate-300 max-w-2xl mx-auto">Contact us today to schedule a consultation and learn how we can help you achieve your financial and strategic goals.</p>
+                
+                <div class="mt-8 max-w-2xl mx-auto">
+                    <form class="grid grid-cols-1 md:grid-cols-2 gap-6 text-left">
+                        <div>
+                            <label for="name" class="block text-sm font-medium text-slate-400">Full Name</label>
+                            <input type="text" id="name" name="name" class="mt-1 block w-full px-3 py-2 bg-slate-700 border border-slate-600 rounded-md text-slate-50 focus:outline-none focus:ring-sky-500 focus:border-sky-500">
+                        </div>
+                        <div>
+                            <label for="email" class="block text-sm font-medium text-slate-400">Email Address</label>
+                            <input type="email" id="email" name="email" class="mt-1 block w-full px-3 py-2 bg-slate-700 border border-slate-600 rounded-md text-slate-50 focus:outline-none focus:ring-sky-500 focus:border-sky-500">
+                        </div>
+                        <div class="md:col-span-2">
+                            <label for="message" class="block text-sm font-medium text-slate-400">How Can We Help You?</label>
+                            <textarea id="message" name="message" rows="4" class="mt-1 block w-full px-3 py-2 bg-slate-700 border border-slate-600 rounded-md text-slate-50 focus:outline-none focus:ring-sky-500 focus:border-sky-500"></textarea>
+                        </div>
+                        <div class="md:col-span-2 text-center">
+                            <button type="submit" class="w-full inline-flex justify-center py-3 px-6 border border-transparent shadow-sm text-base font-medium rounded-md text-white bg-sky-800 hover:bg-sky-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-sky-500">Submit</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="bg-slate-900 text-slate-400 py-6">
+        <div class="container mx-auto px-6 text-center">
+            <p>&copy; 2024 ithmaar Financial Advisory. All Rights Reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const tabs = document.querySelectorAll('.tab');
+            const tabContents = document.querySelectorAll('.tab-content');
+
+            tabs.forEach(tab => {
+                tab.addEventListener('click', () => {
+                    const target = tab.getAttribute('data-tab');
+
+                    tabs.forEach(t => t.classList.remove('active'));
+                    t.classList.add('active');
+
+                    tabContents.forEach(content => {
+                        if (content.id === target) {
+                            content.classList.remove('hidden');
+                        } else {
+                            content.classList.add('hidden');
+                        }
+                    });
+                });
+            });
+
+            const ctx = document.getElementById('marketChart').getContext('2d');
+            const marketChart = new Chart(ctx, {
+                type: 'radar',
+                data: {
+                    labels: ['Financial Strategy', 'Market Entry', 'Valuation', 'Due Diligence', 'Operational Efficiency'],
+                    datasets: [{
+                        label: "ithmaar's Expertise",
+                        data: [90, 85, 95, 80, 75],
+                        backgroundColor: 'rgba(46, 102, 140, 0.4)',
+                        borderColor: 'rgba(46, 102, 140, 1)',
+                        pointBackgroundColor: 'rgba(46, 102, 140, 1)',
+                        pointBorderColor: '#fff',
+                        pointHoverBackgroundColor: '#fff',
+                        pointHoverBorderColor: 'rgba(46, 102, 140, 1)',
+                        borderWidth: 2
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        r: {
+                            angleLines: {
+                                color: 'rgba(51, 65, 85, 0.2)'
+                            },
+                            grid: {
+                                color: 'rgba(51, 65, 85, 0.2)'
+                            },
+                            pointLabels: {
+                                color: 'rgb(51, 65, 85)',
+                                font: {
+                                    size: 14,
+                                    weight: 'bold'
+                                }
+                            },
+                            ticks: {
+                                display: false
+                            },
+                            min: 0,
+                            max: 100
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            display: false,
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return context.label + ': ' + context.parsed.r + '%';
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html>
+ 
